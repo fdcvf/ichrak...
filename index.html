@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اعرف إشراق</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: radial-gradient(circle, rgba(4, 13, 39, 1) 0%, rgba(0, 0, 0, 1) 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            animation: backgroundMove 15s infinite linear;
+        }
+        @keyframes backgroundMove {
+            0% {background: radial-gradient(circle, rgba(4, 13, 39, 1) 0%, rgba(0, 0, 0, 1) 100%);}
+            50% {background: radial-gradient(circle, rgba(10, 20, 60, 1) 0%, rgba(0, 0, 0, 1) 100%);}
+            100% {background: radial-gradient(circle, rgba(4, 13, 39, 1) 0%, rgba(0, 0, 0, 1) 100%);}
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffcc00;
+            text-shadow: 2px 2px 10px rgba(255, 204, 0, 0.8);
+        }
+
+        .question {
+            margin: 20px 0;
+            font-size: 1.8rem;
+            color: #ffcc00;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            margin: 20px 0;
+        }
+
+        .options button {
+            padding: 15px;
+            background-color: rgba(255, 204, 0, 0.7);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            transform: scale(1);
+        }
+
+        .options button:hover {
+            background-color: rgba(255, 204, 0, 1);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 204, 0, 1);
+        }
+
+        .options button:active {
+            transform: scale(0.95);
+            transition: all 0.2s ease;
+        }
+
+        .score {
+            font-size: 1.5rem;
+            color: #ffcc00;
+            margin: 10px 0;
+        }
+
+        .message {
+            font-size: 1.5rem;
+            color: #ffcc00;
+            margin-top: 30px;
+            opacity: 0;
+            animation: fadeInMessage 1s forwards;
+        }
+
+        @keyframes fadeInMessage {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .answer-box {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .answer-box input {
+            padding: 10px;
+            font-size: 1.2rem;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: none;
+            width: 300px;
+        }
+
+        .answer-box button {
+            padding: 10px;
+            font-size: 1.5rem;
+            background-color: rgba(255, 204, 0, 0.7);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .answer-box button:hover {
+            background-color: rgba(255, 204, 0, 1);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 204, 0, 1);
+        }
+
+        .answer-box button:active {
+            transform: scale(0.95);
+        }
+
+        .scroll-effect {
+            animation: scrollEffect 5s ease-out infinite;
+        }
+
+        @keyframes scrollEffect {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>اعرف إشراق</h1>
+    <div class="score">النتيجة: <span id="score">0</span></div>
+
+    <div class="question" id="question">ما هو اسم إشراق؟</div>
+
+    <div class="options" id="options">
+        <!-- ستكون الخيارات هنا ديناميكية -->
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <div class="answer-box" id="answer-box">
+        <label for="answer">هل تعرف أحدًا يحب إشراق مثل Ximo؟</label><br>
+        <input type="text" id="answer" placeholder="أجب هنا...">
+        <button onclick="submitAnswer()">أرسل</button>
+    </div>
+
+    <script>
+        let score = 0;
+        const scoreDisplay = document.getElementById("score");
+        const questionDisplay = document.getElementById("question");
+        const messageDisplay = document.getElementById("message");
+        const answerBox = document.getElementById("answer-box");
+        const optionsContainer = document.getElementById("options");
+
+        // أسئلة وإجابات مع خيارات متعددة
+        const questions = [
+            { question: "ما هو اسم إشراق؟", correctAnswers: ["إشراق"], options: ["إشراق", "رؤية", "سما", "جمال"] },
+            { question: "ما هو لقب إشراق؟", correctAnswers: ["محديد"], options: ["محديد", "نور", "سارة", "أحلام"] },
+            { question: "ما هو اسم إشراق الثاني؟", correctAnswers: ["رقية"], options: ["رقية", "سارة", "هناء", "مريم"] },
+            { question: "ما هو اسم والد إشراق؟", correctAnswers: ["نبيل"], options: ["نبيل", "يوسف", "علي", "إبراهيم"] },
+            { question: "ما هو تاريخ ميلاد إشراق؟", correctAnswers: ["7/7/2009", "7 يوليو 2009"], options: ["7/7/2009", "1/1/2008", "8/8/2010", "5/5/2009"] },
+            { question: "ما هي سيارة والد إشراق؟", correctAnswers: ["شيفروليه فضية 2007"], options: ["شيفروليه فضية 2007", "تويوتا 2015", "فورد 2009", "هوندا 2010"] },
+            { question: "أين يعمل والد إشراق؟", correctAnswers: ["البويرة"], options: ["البويرة", "الجزائر العاصمة", "وهران", "تلمسان"] },
+            { question: "كم يوم يعمل والد إشراق؟", correctAnswers: ["4 أيام"], options: ["4 أيام", "5 أيام", "6 أيام", "3 أيام"] },
+            { question: "أين يسكن إشراق؟", correctAnswers: ["طرف ليكوتاك أرضي"], options: ["طرف ليكوتاك أرضي", "الجزائر العاصمة", "البليدة", "المدية"] },
+            { question: "كم عدد إخوة إشراق؟", correctAnswers: ["أربعة طفلان و فتاة"], options: ["أربعة طفلان و فتاة", "ثلاثة طفلان و فتاة", "خمسة طفلان و فتاة", "ثلاثة"] },
+            { question: "من يحب إشراق؟", correctAnswers: ["Ximo"], options: ["Ximo", "أحمد", "محمود", "حسان"] },
+        ];
+
+        let currentQuestionIndex = 0;
+
+        // الإجابة على السؤال
+        function answerQuestion(answer, questionIndex) {
+            const correctAnswers = questions[questionIndex].correctAnswers;
+            if (correctAnswers.includes(answer)) {
+                score++;
+                scoreDisplay.textContent = `النتيجة: ${score}`;
+                showMessage(`صحيح!`);
+            } else {
+                showMessage("إجابة خاطئة. حاول مرة أخرى.");
+            }
+
+            // الانتقال إلى السؤال التالي
+            currentQuestionIndex++;
+
+            // إذا أكمل اللاعب الأسئلة، يظهر السؤال الأخير
+            if (currentQuestionIndex >= questions.length) {
+                showAnswerBox();
+            } else {
+                loadQuestion(currentQuestionIndex);
+            }
+        }
+
+        // إظهار الرسالة
+        function showMessage(message) {
+            messageDisplay.textContent = message;
+            messageDisplay.classList.add("scroll-effect");
+        }
+
+        // تحميل السؤال التالي
+        function loadQuestion(questionIndex) {
+            const question = questions[questionIndex];
+            questionDisplay.textContent = question.question;
+            optionsContainer.innerHTML = "";
+            const shuffledOptions = shuffleArray(question.options);
+
+            shuffledOptions.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => answerQuestion(option, questionIndex);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // إخفاء الخيارات والانتقال للإجابة
+        function showAnswerBox() {
+            optionsContainer.style.display = "none";
+            answerBox.style.display = "block";
+        }
+
+        // تقديم الإجابة عند إدخال نص
+        function submitAnswer() {
+            const userAnswer = document.getElementById("answer").value;
+            if (userAnswer) {
+                showMessage(`إجابتك: ${userAnswer}`);
+                score++;
+                scoreDisplay.textContent = `النتيجة: ${score}`;
+                setTimeout(() => alert("لقد أكملت اللعبة!"), 1000);
+            }
+        }
+
+        // خلط الإجابات عشوائيًا
+        function shuffleArray(array) {
+            let shuffledArray = array.slice();
+            for (let i = shuffledArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+            }
+            return shuffledArray;
+        }
+
+        // بدء اللعبة
+        loadQuestion(currentQuestionIndex);
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
